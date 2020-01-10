@@ -1,9 +1,7 @@
 import React from 'react';
 
 const Location = () => (
-    <div>
-        <h2> LocaltionComponent - Colombia</h2>
-    </div>
-)
+    <div><h1>Buenos Aires</h1></div>
+);
 
 export default Location;
