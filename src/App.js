@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import WeatherLocation from './components/WeatherLocation';
-import DynamicForm from './components/DynamicForm';
+import DynamicForm from "./components/DynamicForm";
 
-
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   render() {
