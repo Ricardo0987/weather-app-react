@@ -12,7 +12,7 @@ class DynamicForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { data: { correctResponse: false } }
+        this.state = { data: { correctResponse: false,response:null } }
         console.log('El componente aun no está disponible en el DOM');
     }
 
@@ -23,9 +23,14 @@ class DynamicForm extends React.Component {
         fetch(this.urlApiData).then(
             (res) => {
                 console.log("response", res)
-                this.setState({ data: { correctResponse: true, response: res } });
+                // this.setState({ data: { correctResponse: true } });
+                return res.json();
             }
-        )
+        ).then((data) => {
+            console.log("response2", data);
+            this.setState({ data: { correctResponse: true, response: data } });
+
+        })
     }
 
 
@@ -33,15 +38,12 @@ class DynamicForm extends React.Component {
         if (this.state.data.correctResponse) {
             return (
                 <div>
-                    <Grid container spacing={3}>
-                        <Grid item xs={3}>
-                            <TextField id="standard-basic" label="Standard" />
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <TextField id="standard-basic" label={this.state.data.response.data.TIVO.deviceInfoSearchResponse.manufacturingInfo.type} />
                         </Grid>
-                        <Grid item xs={3}>
-                            <TextField id="standard-basic" label="Standard" />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField id="standard-basic" label="Standard" />
+                        <Grid item xs={6}>
+                            <TextField id="standard-basic" label={this.state.data.response.data.LDAP.orderCompletedEvent.srqAction} />
                         </Grid>
                     </Grid>
                     <br></br>
