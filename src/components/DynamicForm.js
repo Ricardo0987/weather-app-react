@@ -1,10 +1,9 @@
 import React from 'react';
 import Spinner from './Spinner';
+import Skeleton from './Skeleton';
+import axios from 'axios';
 
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button, TextField, TextareaAutosize, Grid } from '@material-ui/core';
 
 class DynamicForm extends React.Component {
 
@@ -12,25 +11,43 @@ class DynamicForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { data: { correctResponse: false,response:null } }
+        this.state = { data: { correctResponse: false, response: null } }
+        this.handleClick = this.handleClick.bind(this);
+        this.getResponse = this.getResponse.bind(this);
         console.log('El componente aun no está disponible en el DOM');
+    }
+
+    handleClick() {
+        this.setState({ data: { correctResponse: false } });
+        this.getResponse();
+    }
+
+    getResponse() {
+
+
+        axios.get(this.urlApiData)
+            .then((data) => {
+                console.log("response2", data);
+                this.setState({ data: { correctResponse: true, response: data.data } });
+
+            })
+
+        // fetch(this.urlApiData).then(
+        //     (res) => {
+        //         console.log("response", res)
+        //         return res.json();
+        //     }
+        // ).then((data) => {
+        //     console.log("response2", data);
+        //     this.setState({ data: { correctResponse: true, response: data } });
+
+        // })
     }
 
 
     componentDidMount() {
         console.log('El componente está disponible en el DOM');
-        // Pedimos algunos datos
-        fetch(this.urlApiData).then(
-            (res) => {
-                console.log("response", res)
-                // this.setState({ data: { correctResponse: true } });
-                return res.json();
-            }
-        ).then((data) => {
-            console.log("response2", data);
-            this.setState({ data: { correctResponse: true, response: data } });
-
-        })
+        this.getResponse();
     }
 
 
@@ -40,20 +57,30 @@ class DynamicForm extends React.Component {
                 <div>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <TextField id="standard-basic" label={this.state.data.response.data.TIVO.deviceInfoSearchResponse.manufacturingInfo.type} />
+                            <TextField id="standard-basic" label="TIVO manufacturingInfo" value={this.state.data.response.data.TIVO.deviceInfoSearchResponse.manufacturingInfo.type} />
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField id="standard-basic" label={this.state.data.response.data.LDAP.orderCompletedEvent.srqAction} />
+                            <TextField id="standard-basic" label="LDAP order event" value={this.state.data.response.data.LDAP.orderCompletedEvent.srqAction} />
                         </Grid>
                     </Grid>
-                    <br></br>
-                    <Button variant="contained" color="primary">
-                        Validar
-                    </Button>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <TextareaAutosize aria-label="minimum height" rowsMin={3} rowsMax={9} placeholder={JSON.stringify(this.state.data.response.data.CUBIWARE)} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextareaAutosize aria-label="minimum height" rowsMin={3} rowsMax={9} placeholder={JSON.stringify(this.state.data.response.data.LINPUB)} />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="primary" onClick={this.handleClick}> Reintentar </Button>
+                        </Grid>
+                    </Grid>
                 </div>
             )
         } else {
-            return <Spinner></Spinner>
+            // return <Spinner></Spinner>
+            return <Skeleton></Skeleton>
         }
 
 
