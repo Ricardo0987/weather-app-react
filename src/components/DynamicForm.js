@@ -23,13 +23,12 @@ class DynamicForm extends React.Component {
     }
 
     getResponse() {
-
+       // debugger;
 
         axios.get(this.urlApiData)
             .then((data) => {
                 console.log("response2", data);
                 this.setState({ data: { correctResponse: true, response: data.data } });
-
             })
 
         // fetch(this.urlApiData).then(
@@ -62,6 +61,7 @@ class DynamicForm extends React.Component {
                         <Grid item xs={6}>
                             <TextField id="standard-basic" label="LDAP order event" value={this.state.data.response.data.LDAP.orderCompletedEvent.srqAction} />
                         </Grid>
+                       
                     </Grid>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
